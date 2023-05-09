@@ -3,7 +3,6 @@ import Head from "next/head";
 import { api } from "$/utils/api";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import {
   questionSchema,
@@ -12,13 +11,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Home: NextPage = () => {
-  const router = useRouter();
-  const id = router.query.id;
-  const idSchema = questionSchema.pick({ id: true });
-  const result = idSchema.safeParse({
-    id,
-  });
-
   const getAllQuery = api.questions.getAll.useQuery();
   const utils = api.useContext();
   const createMutation = api.questions.create.useMutation({
@@ -30,13 +22,16 @@ const Home: NextPage = () => {
     },
   });
 
-  const form = useForm<Pick<QuestionSchema, "question">>({
+  const form = useForm<Pick<QuestionSchema, "question" | "description">>({
     defaultValues: {
       question: "",
+      description: "",
     },
     mode: "onSubmit",
     reValidateMode: "onChange",
-    resolver: zodResolver(questionSchema.pick({ question: true })),
+    resolver: zodResolver(
+      questionSchema.pick({ question: true, description: true }),
+    ),
   });
 
   const deleteQuestion = api.questions.delete.useMutation({
@@ -86,11 +81,11 @@ const Home: NextPage = () => {
               type="text"
               className="rounded-md bg-neutral-700 p-2 text-neutral-100 placeholder-neutral-500"
               placeholder="Make a description..."
-              {...form.register("question")}
+              {...form.register("description")}
             />
-            {form.formState.errors.question && (
+            {form.formState.errors.description && (
               <span className="font-medium text-red-500">
-                {form.formState.errors.question.message}
+                {form.formState.errors.description.message}
               </span>
             )}
           </label>
@@ -107,26 +102,38 @@ const Home: NextPage = () => {
           {getAllQuery.data?.map((question) => (
             <div
               key={question.id}
-              className="flex items-center gap-2 rounded bg-neutral-700 px-6 py-2 text-neutral-100"
+              className="items-center gap-2 rounded bg-neutral-700 px-6 py-2 text-neutral-100 md:flex"
             >
-              {question.question}
+              <div>
+                <h1>
+                  <span className="font-semibold text-green-500">Task:</span>{" "}
+                  {question.question}
+                </h1>
+                <p>
+                  <span className="font-semibold text-green-500">
+                    Description:{" "}
+                  </span>{" "}
+                  {question.description}
+                </p>
+              </div>
+              <div>
+                <Link
+                  href={`/${question.id}`}
+                  className="font-medium text-orange-500"
+                >
+                  View
+                </Link>
 
-              <Link
-                href={`/${question.id}`}
-                className="font-medium text-orange-500"
-              >
-                View
-              </Link>
-
-              <button
-                type="button"
-                className="flex rounded bg-red-500 p-2"
-                onClick={() => {
-                  void deleteQuestion.mutate(result.data);
-                }}
-              >
-                <TrashIcon className="h-6 w-6" />
-              </button>
+                <button
+                  type="button"
+                  className="flex rounded bg-red-500 p-2"
+                  onClick={() => {
+                    void deleteQuestion.mutate(question);
+                  }}
+                >
+                  <TrashIcon className="h-6 w-6" />
+                </button>
+              </div>
             </div>
           ))}
         </div>

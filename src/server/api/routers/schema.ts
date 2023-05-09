@@ -12,6 +12,7 @@ export const questionSchema = z.object({
     .trim()
     .min(10, "Must be at least 10 characters long")
     .refine((v) => v.endsWith("?"), "Must end with a question mark"),
+  description: z.string().trim().min(50, "Must be at least 50 characters long"),
   answers: z.array(answerSchema),
 });
 
