@@ -8,6 +8,7 @@ import {
   type QuestionSchema,
 } from "$/server/api/routers/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
   const getAllQuery = api.questions.getAll.useQuery();
@@ -50,6 +51,19 @@ const Home: NextPage = () => {
       void utils.questions.getAll.invalidate();
     },
   });
+
+  const [editingQuestion, setEditingQuestion] = useState<QuestionSchema>();
+
+  const handleEdit = (question: QuestionSchema) => {
+    form.reset({
+      question: question.question,
+      description: question.description,
+      category: question.category,
+      dueDate: question.dueDate,
+    });
+
+    setEditingQuestion(question);
+  };
 
   return (
     <>
@@ -174,7 +188,12 @@ const Home: NextPage = () => {
                 </p>
               </div>
               <div className="mt-10 justify-between md:flex">
-                <button className="rounded-md bg-green-600 px-10 py-2 font-bold text-white hover:bg-green-700">
+                <button
+                  className="rounded-md bg-green-600 px-10 py-2 font-bold text-white hover:bg-green-700"
+                  onClick={() => {
+                    handleEdit(question);
+                  }}
+                >
                   Update
                 </button>
                 <select className="mt-3 rounded-md bg-slate-900 p-2 text-neutral-100 placeholder-neutral-500">
