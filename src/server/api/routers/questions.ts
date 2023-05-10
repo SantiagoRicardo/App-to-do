@@ -11,6 +11,7 @@ const POSTS: QuestionSchema[] = [
       "Create a new task and return it to the server and return it to the user",
     category: "Desing UX and UI",
     dueDate: "2023-06-02",
+    status: "Completed",
     answers: [
       {
         id: "1",
@@ -42,6 +43,7 @@ export const questionsRouter = createTRPCRouter({
         description: true,
         dueDate: true,
         category: true,
+        status: true,
       }),
     )
     .mutation(({ input }) => {
@@ -52,6 +54,7 @@ export const questionsRouter = createTRPCRouter({
         description: input.description,
         dueDate: input.dueDate,
         category: input.category,
+        status: input.status,
       };
       POSTS.push(post);
       return post;

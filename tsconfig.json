@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
-    "**/*.mjs"
+    "**/*.mjs",
+    "src/pages/(page-lib)/components/create-update"
   ],
   "exclude": ["node_modules"]
 }

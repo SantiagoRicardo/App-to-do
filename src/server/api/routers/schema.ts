@@ -10,7 +10,7 @@ export const questionSchema = z.object({
   question: z.string().trim().min(10, "Must be at least 10 characters long"),
   description: z.string().trim().min(50, "Must be at least 50 characters long"),
   category: z.string().trim().min(5, "Must selection a option"),
-  /*category: z.union([
+  /*category: z.union([   
     z.literal("Software development"),
     z.literal("Desing ux and ui"),
     z.literal("Project manager"),
@@ -21,6 +21,7 @@ export const questionSchema = z.object({
   dueDate: z.string().refine((v) => new Date(v).getTime() > Date.now(), {
     message: "¡oops!, must set an expiration date",
   }),
+  status: z.string().trim().min(5, "Must selection a status"),
   answers: z.array(answerSchema),
 });
 

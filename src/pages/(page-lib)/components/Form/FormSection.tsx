@@ -22,20 +22,6 @@ const Home: NextPage = () => {
     },
   });
 
-  const updateMutation = api.questions.update.useMutation({
-    onSuccess: (res) => {
-      if (res == null) return;
-
-      void utils.questions.getOne.invalidate({
-        id: res.id,
-      });
-      void utils.questions.getAll.invalidate();
-      setEditingQuestion(undefined);
-      setIsUpdating(false);
-      form.reset();
-    },
-  });
-
   const form = useForm<
     Pick<
       QuestionSchema,
@@ -72,7 +58,6 @@ const Home: NextPage = () => {
   });
 
   const [editingQuestion, setEditingQuestion] = useState<QuestionSchema>();
-  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleEdit = (question: QuestionSchema) => {
     form.reset({
@@ -80,11 +65,9 @@ const Home: NextPage = () => {
       description: question.description,
       category: question.category,
       dueDate: question.dueDate,
-      status: question.status,
     });
 
     setEditingQuestion(question);
-    setIsUpdating(true);
   };
 
   return (
@@ -172,23 +155,6 @@ const Home: NextPage = () => {
                 </span>
               )}
             </label>
-
-            <label className="flex w-full flex-col gap-2 text-neutral-100">
-              Add a status
-              <select
-                {...form.register("status")}
-                className="rounded-md bg-neutral-700 p-2 text-neutral-100 placeholder-neutral-500"
-              >
-                <option value="Ongoing">Ongoing</option>
-                <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
-              </select>
-              {form.formState.errors.status && (
-                <span className="font-medium text-red-500">
-                  {form.formState.errors.status.message}
-                </span>
-              )}
-            </label>
             <button
               type="submit"
               className="mt-5 w-full rounded-md bg-blue-600 p-2 font-bold text-neutral-100"
@@ -225,10 +191,6 @@ const Home: NextPage = () => {
                   <span className="font-semibold text-green-500">Date: </span>{" "}
                   {question.dueDate}
                 </p>
-                <p>
-                  <span className="font-semibold text-green-500">Status: </span>{" "}
-                  {question.status}
-                </p>
               </div>
               <div className="mt-10 justify-between md:flex">
                 <button
@@ -239,7 +201,12 @@ const Home: NextPage = () => {
                 >
                   Update
                 </button>
-
+                <select className="mt-3 rounded-md bg-slate-900 p-2 text-neutral-100 placeholder-neutral-500">
+                  <option selected>Status</option>
+                  <option value="desing">Ongoing</option>
+                  <option value="desing">Pending</option>
+                  <option value="develop">Completed</option>
+                </select>
                 <button
                   type="button"
                   className="mt-3 flex rounded bg-red-500 p-2"
