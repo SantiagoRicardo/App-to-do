@@ -25,14 +25,5 @@ export const questionSchema = z.object({
   answers: z.array(answerSchema),
 });
 
-const createQuestionInput = questionSchema.pick({
-  id: true,
-  question: true,
-  description: true,
-  category: true,
-  dueDate: true,
-});
-
-//export type CreateQuestionInput = z.infer<typeof createQuestionInput>;
 export type AnswerSchema = z.infer<typeof answerSchema>;
 export type QuestionSchema = z.infer<typeof questionSchema>;
