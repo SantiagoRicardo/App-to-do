@@ -9,8 +9,8 @@ const POSTS: QuestionSchema[] = [
     question: "What is the meaning of life?",
     description:
       "Create a new task and return it to the server and return it to the user",
-    category: "Develop",
-    dueDate: "2023/06/02",
+    category: "Desing UX and UI",
+    dueDate: "2023-06-02",
     answers: [
       {
         id: "1",
