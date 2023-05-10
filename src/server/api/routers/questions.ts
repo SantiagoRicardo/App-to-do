@@ -9,6 +9,8 @@ const POSTS: QuestionSchema[] = [
     question: "What is the meaning of life?",
     description:
       "Create a new task and return it to the server and return it to the user",
+    category: "Develop",
+    dueDate: "2023/06/02",
     answers: [
       {
         id: "1",
@@ -34,13 +36,22 @@ export const questionsRouter = createTRPCRouter({
       return POSTS.find((post) => post.id === input.id) ?? null;
     }),
   create: publicProcedure
-    .input(questionSchema.pick({ question: true, description: true }))
+    .input(
+      questionSchema.pick({
+        question: true,
+        description: true,
+        dueDate: true,
+        category: true,
+      }),
+    )
     .mutation(({ input }) => {
       const post: QuestionSchema = {
         ...input,
         id: Math.random().toString(),
         answers: [],
         description: input.description,
+        dueDate: input.dueDate,
+        category: input.category,
       };
       POSTS.push(post);
       return post;
