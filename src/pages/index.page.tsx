@@ -8,7 +8,7 @@ import {
   type QuestionSchema,
 } from "$/server/api/routers/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Home: NextPage = () => {
   const getAllQuery = api.questions.getAll.useQuery();
@@ -19,20 +19,6 @@ const Home: NextPage = () => {
 
       const data = utils.questions.getAll.getData() ?? [];
       utils.questions.getAll.setData(undefined, [...data, res]);
-    },
-  });
-
-  const updateMutation = api.questions.update.useMutation({
-    onSuccess: (res) => {
-      if (res == null) return;
-
-      void utils.questions.getOne.invalidate({
-        id: res.id,
-      });
-      void utils.questions.getAll.invalidate();
-      setEditingQuestion(undefined);
-      setIsUpdating(false);
-      form.reset();
     },
   });
 
@@ -87,6 +73,20 @@ const Home: NextPage = () => {
     setIsUpdating(true);
   };
 
+  const updateMutation = api.questions.update.useMutation({
+    onSuccess: (res) => {
+      if (res == null) return;
+
+      void utils.questions.getOne.invalidate({
+        id: res.id,
+      });
+      void utils.questions.getAll.invalidate();
+      setEditingQuestion(editingQuestion);
+      setIsUpdating(false);
+      form.reset();
+    },
+  });
+
   return (
     <>
       <Head>
@@ -100,7 +100,14 @@ const Home: NextPage = () => {
           <form
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={form.handleSubmit((data) => {
-              void createMutation.mutate(data);
+              if (isUpdating) {
+                void updateMutation.mutate({
+                  ...data,
+                  id: editingQuestion?.id ?? "",
+                });
+              } else {
+                void createMutation.mutate(data);
+              }
               form.reset();
             })}
             className="gap-2"

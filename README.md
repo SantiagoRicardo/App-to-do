@@ -15,9 +15,18 @@ I tryed to keep this project as simple as possible.
 ## Repository structure
 
 Folders
-`pages/(page-lib)/components`: folder of the main components that are rendered in idex.pages.tsx
 
-File
+`pages`: in this folder every component created is pre-rendered on the next js server to show the rendering to the client and not the whole component, for fast execution.
+
+`utils`: Contain `api.ts` is the client-side entry point for a tRPC (Transport Protocol for React Query) API. tRPC is a set of tools that allows you to create type-safe APIs on the client side and on the server side.
+
+`server`: contains an
+
+- `api` folder with a subfolder in `api` called `routers` in this folder I have created a file to create the `Create`, `Delete` and `Update` functionalities, using `tRPC`, plus a file called `schemas.ts` which is where the body of the task is located.
+
+-Files: `root.ts` and `trpc.ts` for trpc configuration.
+
+File main
 `index.page.tsx`: main file containing the structure of the web page.
 
 ## Technologies Used
