@@ -24,7 +24,7 @@ Folders
 
 - `api` folder with a subfolder in `api` called `routers` in this folder I have created a file to create the `Create`, `Delete` and `Update` functionalities, using `tRPC`, plus a file called `schemas.ts` which is where the body of the task is located.
 
--Files: `root.ts` and `trpc.ts` for trpc configuration.
+- Files: `root.ts` and `trpc.ts` for trpc configuration.
 
 File main
 `index.page.tsx`: main file containing the structure of the web page.
