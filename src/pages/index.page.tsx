@@ -135,7 +135,7 @@ const Home: NextPage = () => {
               <input
                 type="text"
                 className="rounded-md bg-neutral-700 p-2 text-neutral-100 placeholder-neutral-500"
-                placeholder="Establish a date..."
+                placeholder="Make a description..."
                 {...form.register("description")}
               />
               {form.formState.errors.description && (
